@@ -131,6 +131,21 @@ Measurement measureSound(void)
   return measurement;
 }
 
+Measurement measureLight(void)
+{
+  Measurement measurement;
+  measurement.name = "Light";
+  measurement.unit = "V";
+  measurement.time = 2000;
+  measurement.error = "";
+
+  int sensor_value = analogRead(lightSensorIn);
+  float voltage = 5.0 * (sensor_value / 1024.0);
+  measurement.value = voltage;
+
+  return measurement;
+}
+
 void sendMeasurementOnSerial(Measurement measurement)
 {
 
@@ -154,11 +169,13 @@ void loop()
     //If not set to false, it will give a "polled to quickly error"
     Measurement humidityMeasurement = measureHumidity(false);
     Measurement soundMeasurement = measureSound();
+    Measurement lightMeasurement = measureLight();
     
     sendMeasurementOnSerial(co2Measurement);
     sendMeasurementOnSerial(temperatureMeasurement);
     sendMeasurementOnSerial(humidityMeasurement);
     sendMeasurementOnSerial(soundMeasurement);
+    sendMeasurementOnSerial(lightMeasurement);
 
     delay(2000);
   }
