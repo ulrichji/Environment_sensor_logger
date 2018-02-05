@@ -116,6 +116,21 @@ Measurement measureHumidity(bool do_read_data=true)
   return measurement;
 }
 
+Measurement measureSound(void)
+{
+  Measurement measurement;
+  measurement.name = "Sound";
+  measurement.unit = "V";
+  measurement.time = 2000;
+  measurement.error = "";
+  
+  int sensor_value = analogRead(soundSensorIn);
+  float voltage = 5.0 * (sensor_value / 1024.0);
+  measurement.value = voltage;
+
+  return measurement;
+}
+
 void sendMeasurementOnSerial(Measurement measurement)
 {
 
@@ -138,10 +153,12 @@ void loop()
     //The false argument prevents a new read and uses the value obtained from the same sensor in the temperature measurement
     //If not set to false, it will give a "polled to quickly error"
     Measurement humidityMeasurement = measureHumidity(false);
+    Measurement soundMeasurement = measureSound();
     
     sendMeasurementOnSerial(co2Measurement);
     sendMeasurementOnSerial(temperatureMeasurement);
     sendMeasurementOnSerial(humidityMeasurement);
+    sendMeasurementOnSerial(soundMeasurement);
 
     delay(2000);
   }
