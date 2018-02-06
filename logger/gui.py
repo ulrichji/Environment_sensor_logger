@@ -11,9 +11,9 @@ class SensorLoggerApplication(tk.Frame):
 	def __init__(self, master=None):
 		super().__init__(master)
 		self.pack()
-		self.value_list = collections.OrderedDict()
+		self.value_list = {}
 	
-	def addMeasurement(self,measurement):
+	def addMeasurement(self, measurement):
 		name = measurement.name
 		
 		if(name in self.value_list):
@@ -30,15 +30,38 @@ class SensorLoggerApplication(tk.Frame):
 			value_label_text.set(measurement.value)
 			unit_label_text.set(measurement.unit)
 			
-			name_label = tk.Label(self, textvariable=name_label_text)
-			value_label = tk.Label(self, textvariable=value_label_text)
-			unit_label = tk.Label(self, textvariable=unit_label_text)
+			name_label = tk.Label(self, textvariable=name_label_text, font=("Calibri",40))
+			value_label = tk.Label(self, textvariable=value_label_text, font=("Calibri",40))
+			unit_label = tk.Label(self, textvariable=unit_label_text, font=("Calibri",40))
 			
-			name_label.grid(row=len(self.value_list), column=0)
-			value_label.grid(row=len(self.value_list), column=1)
-			unit_label.grid(row=len(self.value_list), column=2)
+			row = len(self.value_list)
 			
-			self.value_list[name] = [name_label_text, value_label_text, unit_label_text]
+			name_label.grid(row=row, column=0)
+			value_label.grid(row=row, column=1)
+			unit_label.grid(row=row, column=2)
+			
+			self.value_list[name] = (name_label_text, value_label_text, unit_label_text, name_label, value_label, unit_label, row)
+	
+	def reEnumerateElements(self):
+		pass
+	
+	def removeMeasurement(self, measure):
+		name = ""
+		if(type(measure) is measurement.Measurement):
+			name = measure.name
+		else:
+			name = measure
+		
+		if(name in self.value_list):
+			self.value_list[name][3].grid_forget()
+			self.value_list[name][4].grid_forget()
+			self.value_list[name][5].grid_forget()
+			
+			del self.value_list[name]
+			self.reEnumerateElements()
+			
+		else:
+			raise Exception("The sensor "+str(name)+" cannot be removed because it's not added.")
 
 def exampleMeasurements(application):
 	time.sleep(1.0)
@@ -61,6 +84,11 @@ def exampleMeasurements(application):
 	ex3.value = "22.2"
 	ex3.unit = "C"
 	application.addMeasurement(ex3)
+	
+	time.sleep(1.0)
+	application.removeMeasurement(ex1)
+	time.sleep(1.0)
+	application.removeMeasurement("Temperature")
 
 def main():
 	root = tk.Tk()
