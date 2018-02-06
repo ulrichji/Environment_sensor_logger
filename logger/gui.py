@@ -40,10 +40,29 @@ class SensorLoggerApplication(tk.Frame):
 			value_label.grid(row=row, column=1)
 			unit_label.grid(row=row, column=2)
 			
-			self.value_list[name] = (name_label_text, value_label_text, unit_label_text, name_label, value_label, unit_label, row)
+			self.value_list[name] = [name_label_text, value_label_text, unit_label_text, name_label, value_label, unit_label, row]
 	
 	def reEnumerateElements(self):
-		pass
+		values = sorted(self.value_list.values(), key=lambda tup : tup[6])
+		
+		for expected_index in range(len(values)):
+			actual_index = values[expected_index][6]
+			if(actual_index != expected_index):
+				values[expected_index][6] = expected_index
+		
+		for label_tuple in values:
+			name_label = label_tuple[3]
+			value_label = label_tuple[4]
+			unit_label = label_tuple[5]
+			row = label_tuple[6]
+			
+			name_label.grid_forget()
+			value_label.grid_forget()
+			unit_label.grid_forget()
+			
+			name_label.grid(row=row, column=0)
+			value_label.grid(row=row, column=1)
+			unit_label.grid(row=row, column=2)
 	
 	def removeMeasurement(self, measure):
 		name = ""
@@ -84,6 +103,12 @@ def exampleMeasurements(application):
 	ex3.value = "22.2"
 	ex3.unit = "C"
 	application.addMeasurement(ex3)
+	
+	ex4 = measurement.Measurement("")
+	ex4.name = "Humidity"
+	ex4.value = "30"
+	ex4.unit = "%"
+	application.addMeasurement(ex4)
 	
 	time.sleep(1.0)
 	application.removeMeasurement(ex1)
