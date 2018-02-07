@@ -51,9 +51,17 @@ class Measurement:
 		self.value = None
 		self.unit = None
 		self.sensor_name = None
+		self.next_measurement_time = 1000
 	
 	def __init__(self, measurement_string):
 		key_values = parseMeasurement(measurement_string)
+		
+		self.timestamp = None
+		self.sequence = None
+		self.value = None
+		self.unit = None
+		self.sensor_name = None
+		self.next_measurement_time = 1000
 
 
 def run_tests():
