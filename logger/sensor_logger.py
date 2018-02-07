@@ -6,6 +6,7 @@ import example_measurement_stream
 import gui
 import tkinter as tk
 import threading
+import serial_measurement_stream
 
 def applicationThread(application):
 	application.mainloop()
@@ -31,8 +32,7 @@ def main():
 	if(logger_type == "example"):
 		logger = example_measurement_stream.ExampleMeasurementStream()
 	elif(logger_type.startswith("com")):
-		#TODO open a serial logger
-		pass
+		logger = serial_measurement_stream.SerialMeasurementStream(logger_type.upper())
 	else:
 		raise Exception("The logger "+str(logger_type)+" is not recognized by the system")
 	

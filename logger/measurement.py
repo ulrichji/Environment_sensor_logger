@@ -44,16 +44,8 @@ def parseMeasurement(measurement_string):
 	return key_values
 
 class Measurement:
-
-	def __init__(self):
-		self.timestamp = None
-		self.sequence = None
-		self.value = None
-		self.unit = None
-		self.sensor_name = None
-		self.next_measurement_time = 1000
 	
-	def __init__(self, measurement_string):
+	def __init__(self, measurement_string = ""):
 		key_values = parseMeasurement(measurement_string)
 		
 		self.timestamp = None
@@ -62,6 +54,19 @@ class Measurement:
 		self.unit = None
 		self.sensor_name = None
 		self.next_measurement_time = 1000
+		
+		if("timestamp" in key_values):
+			self.timestamp = key_values["timestamp"]
+		if("sequence" in key_values):
+			self.sequence = int(key_values["sequence"])
+		if("value" in key_values):
+			self.value = float(key_values["value"])
+		if("unit" in key_values):
+			self.unit = key_values["unit"]
+		if("name" in key_values):
+			self.sensor_name = key_values["name"]
+		if("time" in key_values):
+			self.next_measurement_time = int(key_values["time"])
 
 
 def run_tests():
@@ -71,6 +76,12 @@ def run_tests():
 	key_pairs2 = parseMeasurement(measurement_string2)
 	print(key_pairs)
 	print(key_pairs2)
+	
+	measure1 = Measurement(measurement_string)
+	measure2 = Measurement(measurement_string2)
+	
+	print(measure1)
+	print(measure2)
 
 
 if __name__ == "__main__":
