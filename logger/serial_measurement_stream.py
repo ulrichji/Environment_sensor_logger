@@ -17,8 +17,8 @@ class SerialMeasurementStream(measurement_stream.MeasurementStream):
 		ser = serial.Serial(self.serial_port, timeout=1.0)
 		
 		while(self.running):
-			line = ser.readline()
-			measure = Measurement.measurement(line)
+			line = ser.readline().decode("utf-8") 
+			measure = measurement.Measurement(line)
 			self.measurementCallback(measure)
 	
 	def stopStream(self):
